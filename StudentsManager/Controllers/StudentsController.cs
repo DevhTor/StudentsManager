@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using StudentsManager.Models;
+using StudentsManager.Services;
 
 namespace StudentsManager.Controllers
 {
@@ -8,96 +8,65 @@ namespace StudentsManager.Controllers
     [ApiController]
     public class StudentsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly StudentService _studentService;
 
-        public StudentsController(ApplicationDbContext context)
+        public StudentsController(StudentService studentService)
         {
-            _context = context;
+            _studentService = studentService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
         {
-            return await _context.Students
-                                .Include(s => s.Homeworks)
-                                .ToListAsync();
+            return Ok(await _studentService.GetAllStudents());
         }
-
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Student>> GetStudent(long id)
         {
-            var student = await _context.Students
-                                    .Include(s => s.Homeworks)
-                                    .FirstOrDefaultAsync(s => s.Id == id);
-
+            var student = await _studentService.GetStudentById(id);
             if (student == null)
             {
                 return NotFound();
             }
-
-            return student;
+            return Ok(student);
         }
 
+        //Get FinalScore
+        [HttpGet("FinalScores")]
+        public async Task<ActionResult<IEnumerable<StudentFinalScore>>> GetFinalScores()
+        {
+            var finalScores = await _studentService.GetFinalScoresAsync();
+            return Ok(finalScores);
+        }
 
         [HttpPost]
         public async Task<ActionResult<Student>> PostStudent(Student student)
         {
-            _context.Students.Add(student);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetStudent", new { id = student.Id }, student);
+            var newStudent = await _studentService.CreateStudent(student);
+            return CreatedAtAction("GetStudent", new { id = newStudent.Id }, newStudent);
         }
-
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutStudent(long id, Student student)
         {
-            if (id != student.Id)
+            var result = await _studentService.UpdateStudent(id, student);
+            if (!result)
             {
                 return BadRequest();
             }
-
-            _context.Entry(student).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
             return NoContent();
         }
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStudent(long id)
         {
-            var student = await _context.Students.FindAsync(id);
-            if (student == null)
+            var result = await _studentService.DeleteStudent(id);
+            if (!result)
             {
                 return NotFound();
             }
-
-            _context.Students.Remove(student);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool StudentExists(long id)
-        {
-            return _context.Students.Any(e => e.Id == id);
         }
     }
 }

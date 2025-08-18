@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using StudentsManager.Models;
+using StudentsManager.Services;
 
 namespace StudentsManager.Controllers
 {
@@ -8,115 +8,62 @@ namespace StudentsManager.Controllers
     [ApiController]
     public class HomeworksController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly HomeworkService _homeworkService;
 
-        public HomeworksController(ApplicationDbContext context)
+        public HomeworksController(HomeworkService homeworkService)
         {
-            _context = context;
+            _homeworkService = homeworkService;
         }
 
-
-        // Obtiene todas las calificaciones
+        //Get All Homeworks
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Homework>>> GetHomeworks()
         {
-            return await _context.Homeworks.ToListAsync();
+            return Ok(await _homeworkService.GetAllHomeworks());
         }
 
-
-        // Obtiene una calificación por su Id
+        //Get Homework by ID
         [HttpGet("{id}")]
         public async Task<ActionResult<Homework>> GetHomework(long id)
         {
-            var homework = await _context.Homeworks.FindAsync(id);
-
+            var homework = await _homeworkService.GetHomeworkById(id);
             if (homework == null)
             {
                 return NotFound();
             }
-
-            return homework;
+            return Ok(homework);
         }
 
-
-        // Obtiene todas las calificaciones de un estudiante específico
-        [HttpGet("ByStudent/{studentId}")]
-        public async Task<ActionResult<IEnumerable<Homework>>> GetHomeworksByStudent(long studentId)
-        {
-            var studentExists = await _context.Students.AnyAsync(s => s.Id == studentId);
-            if (!studentExists)
-            {
-                return NotFound("Estudiante no encontrado.");
-            }
-
-            var homeworks = await _context.Homeworks
-                                        .Where(h => h.StudentId == studentId)
-                                        .ToListAsync();
-            return homeworks;
-        }
-
-
-        // Crea una nueva calificación
+        //Add Homework
         [HttpPost]
-        public async Task<ActionResult<Homework>> PostHomework(Homework homework)
+        public async Task<ActionResult<Homework>> AddHomework(Homework homework)
         {
-            _context.Homeworks.Add(homework);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetHomework", new { id = homework.Id }, homework);
+            var newHomework = await _homeworkService.CreateHomework(homework);
+            return CreatedAtAction("GetHomework", new { id = newHomework.Id }, newHomework);
         }
 
-
-        // Actualiza una calificación
+        //Update Homework
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutHomework(long id, Homework homework)
+        public async Task<IActionResult> UpdateHomework(long id, Homework homework)
         {
-            if (id != homework.Id)
+            var result = await _homeworkService.UpdateHomework(id, homework);
+            if (!result)
             {
-                return BadRequest();
+                return BadRequest(); // O NotFound() si el ID no existe
             }
-
-            _context.Entry(homework).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HomeworkExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
             return NoContent();
         }
 
-
-        // Elimina una calificación
+        //Delete Homework
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHomework(long id)
         {
-            var homework = await _context.Homeworks.FindAsync(id);
-            if (homework == null)
+            var result = await _homeworkService.DeleteHomework(id);
+            if (!result)
             {
                 return NotFound();
             }
-
-            _context.Homeworks.Remove(homework);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool HomeworkExists(long id)
-        {
-            return _context.Homeworks.Any(e => e.Id == id);
         }
     }
 }

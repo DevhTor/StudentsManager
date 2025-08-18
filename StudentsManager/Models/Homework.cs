@@ -7,11 +7,12 @@ namespace StudentsManager.Models
     {
         public long Id { get; set; }
         public long StudentId { get; set; }
-        public string Description { get; set; }
-        public string Grade { get; set; }
+        public required string Description { get; set; }
+        public int Score { get; set; }
 
-        // Propiedad de navegación
+
         [ForeignKey("StudentId")]
-        public Student Student { get; set; }
+        public required Student Student { get; set; }
+
     }
 }
