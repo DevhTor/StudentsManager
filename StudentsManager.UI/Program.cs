@@ -16,6 +16,13 @@ namespace StudentsManager.UI
                 client.BaseAddress = new Uri("http://localhost:5148/"); // Asegúrate de que el puerto sea el de tu API.
             });
 
+            builder.Services.AddHttpClient<HomeworkApiService>(client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:5148/");
+
+
+            });
+
 
             var app = builder.Build();
 

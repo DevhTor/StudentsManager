@@ -1,15 +1,15 @@
 ﻿@using StudentsManager.UI.Models
-@model List<Student>
+@model List<Homework>
 
 <div class="container mt-5">
-    <h2 class="text-light">Lista De Estudiantes</h2>
+    <h2 class="text-light">Lista De Tareas</h2>
     <table class="table table-striped table-bordered table-dark">
-        <thead >
+        <thead>
             <tr>
                 <th scope="col" class="text-primary">Id</th>
-                <th scope="col" class="text-primary">Matricula</th>
-                <th scope="col" class="text-primary">Nombre</th>
-                <th scope="col" class="text-primary">Date of Birth</th>
+                <th scope="col" class="text-primary">StudentId</th>
+                <th scope="col" class="text-primary">Descripcion</th>
+                <th scope="col" class="text-primary">Calificacion</th>
             </tr>
         </thead>
         <tbody>
@@ -19,9 +19,9 @@
                 {
                     <tr>
                         <th scope="row">@student.Id</th>
-                        <td>@student.StudentNumber</td>
-                        <td>@student.Name</td>
-                        <td>@student.DateOfBirth</td>
+                        <td>@student.StudentId</td>
+                        <td>@student.Description</td>
+                        <td>@student.Score</td>
                     </tr>
                 }
             }

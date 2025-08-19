@@ -22,5 +22,14 @@ namespace StudentsManager.UI.Services
 
             return finalScores ?? new List<StudentFinalScore>();
         }
+
+        public async Task<List<Student>> GetAllStudentsAsync()
+        {
+            var response = await _httpClient.GetAsync("https://localhost:7003/api/Students");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            var students = JsonSerializer.Deserialize<List<Student>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return students ?? new List<Student>();
+        }
     }
 }

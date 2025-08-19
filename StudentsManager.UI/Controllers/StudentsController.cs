@@ -13,6 +13,12 @@ namespace StudentsManager.UI.Controllers
             _studentApiService = studentApiService;
         }
 
+        public async Task<IActionResult> Students()
+        {
+            List<Student> students = await _studentApiService.GetAllStudentsAsync();
+            return View(students);
+        }
+
         public async Task<IActionResult> StudentScores()
         {
             List<StudentFinalScore> studentScores = await _studentApiService.GetFinalScoresAsync();
