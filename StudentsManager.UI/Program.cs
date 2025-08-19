@@ -11,17 +11,11 @@ namespace StudentsManager.UI
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddHttpClient<StudentApiService>(client =>
-            {
-                client.BaseAddress = new Uri("http://localhost:5148/"); // Asegúrate de que el puerto sea el de tu API.
-            });
+            const string BaseApiUri = "https://localhost:7003/";
 
-            builder.Services.AddHttpClient<HomeworkApiService>(client =>
-            {
-                client.BaseAddress = new Uri("http://localhost:5148/");
+            builder.Services.AddHttpClient<StudentApiService>(client => client.BaseAddress = new Uri(BaseApiUri));
 
-
-            });
+            builder.Services.AddHttpClient<HomeworkApiService>(client => client.BaseAddress = new Uri(BaseApiUri));
 
 
             var app = builder.Build();

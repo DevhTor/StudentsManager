@@ -25,11 +25,19 @@ namespace StudentsManager.UI.Services
 
         public async Task<List<Student>> GetAllStudentsAsync()
         {
-            var response = await _httpClient.GetAsync("https://localhost:7003/api/Students");
+            var response = await _httpClient.GetAsync("/api/Students");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             var students = JsonSerializer.Deserialize<List<Student>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             return students ?? new List<Student>();
+        }
+
+        public async Task<bool> DeleteStudentAsync(long id)
+        {
+            var response = await _httpClient.DeleteAsync($"/api/Students/{id}");
+
+            // Verifica si la solicitud fue exitosa (código 204 No Content para DELETE)
+            return response.IsSuccessStatusCode;
         }
     }
 }

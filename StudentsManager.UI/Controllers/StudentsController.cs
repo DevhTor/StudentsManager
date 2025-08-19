@@ -25,5 +25,24 @@ namespace StudentsManager.UI.Controllers
 
             return View(studentScores);
         }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(long id)
+        {
+            var success = await _studentApiService.DeleteStudentAsync(id);
+
+            if (success)
+            {
+                TempData["StatusMessage"] = "Estudiante eliminado exitosamente.";
+            }
+
+            else
+            {
+                TempData["StatusMessage"] = "Error: No se pudo eliminar al estudiante.";
+            }
+
+            // Manejar el caso de error (ej. mostrar un mensaje de error)
+            return RedirectToAction("Index"); // O a una página de error
+        }
     }
 }
