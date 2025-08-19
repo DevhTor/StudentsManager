@@ -13,7 +13,7 @@ namespace StudentsManager.UI.Controllers
             _homeworkApiService = homeworkApiService;
         }
 
-        public async Task<IActionResult> Homeworks()
+        public async Task<IActionResult> Index()
         {
             List<Homework> homeworks = await _homeworkApiService.GetAllHomeworksAsync();
             return View(homeworks);
