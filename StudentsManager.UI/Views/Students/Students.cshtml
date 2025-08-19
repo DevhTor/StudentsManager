@@ -1,0 +1,30 @@
+﻿@using StudentsManager.UI.Models
+@model List<StudentFinalScore>
+
+<div class="container mt-5">
+    <h2>Student List</h2>
+    <table class="table table-striped table-bordered table-dark">
+        <thead >
+            <tr>
+                <th scope="col" class="text-primary">#</th>
+                <th scope="col" class="text-primary">Student Number</th>
+                <th scope="col" class="text-primary">Name</th>
+                <th scope="col" class="text-primary">Date of Birth</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var student in Model)
+                {
+                    <tr>
+                        <th scope="row">@student.StudentId</th>
+                        <td>@student.StudentName</td>
+                        <td>@student.FinalScoreNumber</td>
+                        <td>@student.FinalScoreLetter</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

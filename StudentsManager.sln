@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36401.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentsManager", "StudentsManager\StudentsManager.csproj", "{FD4C5791-8A76-43A5-AC6D-D4870F4394B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentsManager.UI", "StudentsManager.UI\StudentsManager.UI.csproj", "{C26874DA-A18E-4E43-8265-10D32DAD0E0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FD4C5791-8A76-43A5-AC6D-D4870F4394B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD4C5791-8A76-43A5-AC6D-D4870F4394B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD4C5791-8A76-43A5-AC6D-D4870F4394B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C26874DA-A18E-4E43-8265-10D32DAD0E0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C26874DA-A18E-4E43-8265-10D32DAD0E0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C26874DA-A18E-4E43-8265-10D32DAD0E0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C26874DA-A18E-4E43-8265-10D32DAD0E0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
