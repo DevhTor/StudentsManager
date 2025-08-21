@@ -19,6 +19,59 @@ namespace StudentsManager.UI.Controllers
             return View(students);
         }
 
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(Student student)
+        {
+            var success = await _studentApiService.AddStudentAsync(student);
+
+            if (success)
+            {
+                TempData["StatusMessage"] = "Estudiante agregado exitosamente.";
+            }
+            else
+            {
+                TempData["StatusMessage"] = "Error: No se pudo agregar al estudiante.";
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        // Método para mostrar el formulario de edición de un estudiante existente.
+        // Recibe el Id del estudiante como parámetro.
+        public async Task<IActionResult> Edit(long id)
+        {
+            var student = await _studentApiService.GetStudentByIdAsync(id);
+            if (student == null)
+            {
+                // Si el estudiante no se encuentra, redirige a la lista o muestra un error.
+                return NotFound();
+            }
+            return View(student);
+        }
+
+        // Método para procesar los datos del formulario de edición y actualizar el estudiante.
+        [HttpPost]
+        public async Task<IActionResult> Edit(Student student)
+        {
+            var success = await _studentApiService.UpdateStudentAsync(student);
+
+            if (success)
+            {
+                TempData["StatusMessage"] = "Estudiante actualizado exitosamente.";
+            }
+            else
+            {
+                TempData["StatusMessage"] = "Error: No se pudo actualizar al estudiante.";
+            }
+
+            return RedirectToAction("Index");
+        }
+
         public async Task<IActionResult> StudentScores()
         {
             List<StudentFinalScore> studentScores = await _studentApiService.GetFinalScoresAsync();
@@ -41,8 +94,7 @@ namespace StudentsManager.UI.Controllers
                 TempData["StatusMessage"] = "Error: No se pudo eliminar al estudiante.";
             }
 
-            // Manejar el caso de error (ej. mostrar un mensaje de error)
-            return RedirectToAction("Index"); // O a una página de error
+            return RedirectToAction("Index");
         }
     }
 }

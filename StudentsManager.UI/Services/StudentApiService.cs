@@ -1,4 +1,5 @@
 ﻿using StudentsManager.UI.Models;
+using System.Text;
 using System.Text.Json;
 
 namespace StudentsManager.UI.Services
@@ -32,11 +33,42 @@ namespace StudentsManager.UI.Services
             return students ?? new List<Student>();
         }
 
+        // Nuevo método para obtener un estudiante por su Id.
+        public async Task<Student> GetStudentByIdAsync(long id)
+        {
+            var response = await _httpClient.GetAsync($"/api/Students/{id}");
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+            var student = JsonSerializer.Deserialize<Student>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return student;
+        }
+
+        public async Task<bool> AddStudentAsync(Student student)
+        {
+            var jsonContent = JsonSerializer.Serialize(student);
+            var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("/api/Students", httpContent);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        // Nuevo método para actualizar un estudiante existente.
+        public async Task<bool> UpdateStudentAsync(Student student)
+        {
+            var jsonContent = JsonSerializer.Serialize(student);
+            var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync($"/api/Students/{student.Id}", httpContent);
+
+            return response.IsSuccessStatusCode;
+        }
+
         public async Task<bool> DeleteStudentAsync(long id)
         {
             var response = await _httpClient.DeleteAsync($"/api/Students/{id}");
 
-            // Verifica si la solicitud fue exitosa (código 204 No Content para DELETE)
             return response.IsSuccessStatusCode;
         }
     }
