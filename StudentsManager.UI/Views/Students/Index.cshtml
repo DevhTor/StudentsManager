@@ -33,6 +33,8 @@
                         <td>
                             <!-- Contenedor flexbox para alinear los botones horizontalmente -->
                             <div class="d-flex align-items-center">
+                                <!-- Enlace para ver los detalles del estudiante -->
+                                <a asp-controller="Students" asp-action="Details" asp-route-id="@student.Id" class="btn btn-info btn-sm me-2">Detalles</a>
                                 <!-- Enlace para editar el estudiante -->
                                 <a asp-controller="Students" asp-action="Edit" asp-route-id="@student.Id" class="btn btn-warning btn-sm me-2">Editar</a>
                                 <form asp-controller="Students" asp-action="Delete" method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar a este estudiante?');">

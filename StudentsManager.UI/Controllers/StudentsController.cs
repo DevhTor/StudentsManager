@@ -41,20 +41,16 @@ namespace StudentsManager.UI.Controllers
             return RedirectToAction("Index");
         }
 
-        // Método para mostrar el formulario de edición de un estudiante existente.
-        // Recibe el Id del estudiante como parámetro.
         public async Task<IActionResult> Edit(long id)
         {
             var student = await _studentApiService.GetStudentByIdAsync(id);
             if (student == null)
             {
-                // Si el estudiante no se encuentra, redirige a la lista o muestra un error.
                 return NotFound();
             }
             return View(student);
         }
 
-        // Método para procesar los datos del formulario de edición y actualizar el estudiante.
         [HttpPost]
         public async Task<IActionResult> Edit(Student student)
         {
@@ -70,6 +66,17 @@ namespace StudentsManager.UI.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        // Nueva acción para mostrar los detalles de un estudiante
+        public async Task<IActionResult> Details(long id)
+        {
+            var student = await _studentApiService.GetStudentByIdAsync(id);
+            if (student == null)
+            {
+                return NotFound(); // Opcional: manejar el caso de que no se encuentre el estudiante
+            }
+            return View(student);
         }
 
         public async Task<IActionResult> StudentScores()
