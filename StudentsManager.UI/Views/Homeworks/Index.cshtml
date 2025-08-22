@@ -46,14 +46,40 @@
                             <a asp-controller="Homeworks" asp-action="Detail" asp-route-id="@homework.Id" class="btn btn-sm btn-info">Detalles</a>
                             <!-- Botón para editar, enlaza con la acción 'Edit' y pasa el Id del estudiante -->
                             <a asp-controller="Homeworks" asp-action="Edit" asp-route-id="@homework.Id" class="btn btn-sm btn-warning">Editar</a>
-                            <!-- Botón para eliminar, enlaza con la acción 'Delete' y pasa el Id del estudiante -->
-                            <a asp-controller="Homeworks" asp-action="Delete" asp-route-id="@homework.Id" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar esta tarea?');">Eliminar</a>
+                            <!-- Botón para eliminar, abre un modal de confirmación -->
+                            <a href="#" class="btn btn-sm btn-danger delete-btn"
+                               data-id="@homework.Id"
+                               data-description="@homework.Description"
+                               data-bs-toggle="modal"
+                               data-bs-target="#confirmDeleteModal">Eliminar</a>
                         </td>
                     </tr>
                 }
             }
         </tbody>
     </table>
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar la tarea "<span id="homeworkDescriptionSpan"></span>"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form asp-controller="Homeworks" asp-action="Delete" method="post" id="deleteForm">
+                    <input type="hidden" name="id" id="homeworkIdInput" />
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 @if (TempData["StatusMessage"] != null)
@@ -67,7 +93,7 @@
                 messageElement.textContent = message;
                 messageElement.classList.remove('d-none');
                 messageElement.classList.add('alert-success');
-                
+                // Oculta el mensaje después de 5 segundos
                 setTimeout(function () {
                     messageElement.classList.add('d-none');
                 }, 5000);
@@ -75,3 +101,23 @@
         });
     </script>
 }
+
+<script>
+    // Lógica para el modal de confirmación de eliminación
+    var confirmDeleteModal = document.getElementById('confirmDeleteModal');
+    confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
+        // Botón que activó el modal
+        var button = event.relatedTarget;
+        // Extrae la información de los atributos data-
+        var homeworkId = button.getAttribute('data-id');
+        var homeworkDescription = button.getAttribute('data-description');
+
+        // Actualiza el input oculto en el formulario del modal
+        var modalInput = confirmDeleteModal.querySelector('#homeworkIdInput');
+        modalInput.value = homeworkId;
+
+        // Actualiza la descripción en el cuerpo del modal
+        var modalDescriptionSpan = confirmDeleteModal.querySelector('#homeworkDescriptionSpan');
+        modalDescriptionSpan.textContent = homeworkDescription;
+    });
+</script>

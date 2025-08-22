@@ -33,7 +33,7 @@
                         <th scope="row">@student.Id</th>
                         <td>@student.StudentNumber</td>
                         <td>@student.Name</td>
-                        <td>@student.DateOfBirth</td>
+                        <td>@student.DateOfBirth.ToShortDateString()</td>
                         <td>
                             <!-- Contenedor flexbox para alinear los botones horizontalmente -->
                             <div class="d-flex align-items-center">
@@ -41,10 +41,12 @@
                                 <a asp-controller="Students" asp-action="Details" asp-route-id="@student.Id" class="btn btn-info btn-sm me-2">Detalles</a>
                                 <!-- Enlace para editar el estudiante -->
                                 <a asp-controller="Students" asp-action="Edit" asp-route-id="@student.Id" class="btn btn-warning btn-sm me-2">Editar</a>
-                                <form asp-controller="Students" asp-action="Delete" method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar a este estudiante?');">
-                                    <input type="hidden" name="id" value="@student.Id" />
-                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                                </form>
+                                <!-- Botón para eliminar, abre un modal de confirmación -->
+                                <a href="#" class="btn btn-danger btn-sm delete-btn"
+                                   data-id="@student.Id"
+                                   data-name="@student.Name"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#confirmDeleteModal">Eliminar</a>
                             </div>
                         </td>
                     </tr>
@@ -58,6 +60,28 @@
             }
         </tbody>
     </table>
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar al estudiante "<span id="studentNameSpan"></span>"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form asp-controller="Students" asp-action="Delete" method="post" id="deleteForm">
+                    <input type="hidden" name="id" id="studentIdInput" />
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 @if (TempData["StatusMessage"] != null)
@@ -79,3 +103,23 @@
         });
     </script>
 }
+
+<script>
+    // Lógica para el modal de confirmación de eliminación
+    var confirmDeleteModal = document.getElementById('confirmDeleteModal');
+    confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
+        // Botón que activó el modal
+        var button = event.relatedTarget;
+        // Extrae la información de los atributos data-
+        var studentId = button.getAttribute('data-id');
+        var studentName = button.getAttribute('data-name');
+
+        // Actualiza el input oculto en el formulario del modal
+        var modalInput = confirmDeleteModal.querySelector('#studentIdInput');
+        modalInput.value = studentId;
+
+        // Actualiza la descripción en el cuerpo del modal
+        var modalNameSpan = confirmDeleteModal.querySelector('#studentNameSpan');
+        modalNameSpan.textContent = studentName;
+    });
+</script>
