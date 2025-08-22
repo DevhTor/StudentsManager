@@ -1,8 +1,15 @@
 ﻿@using StudentsManager.UI.Models
+@using System.Text.Encodings.Web
 @model List<Homework>
 
 <div class="container mt-5">
-    <h2 class="text-light">Lista De Tareas</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-light">Lista De Tareas</h2>
+        <!-- Nuevo botón para agregar una nueva tarea -->
+        <a asp-controller="Homeworks" asp-action="Add" class="btn btn-primary">
+            Agregar Tarea
+        </a>
+    </div>
     <table class="table table-striped table-bordered table-dark">
         <thead>
             <tr>
@@ -28,3 +35,11 @@
         </tbody>
     </table>
 </div>
+
+@if (TempData["StatusMessage"] != null)
+{
+    var message = TempData["StatusMessage"].ToString();
+    <script>
+        alert('@Html.Raw(JavaScriptEncoder.Default.Encode(message))');
+    </script>
+}

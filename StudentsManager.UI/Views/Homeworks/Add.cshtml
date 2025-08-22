@@ -1,0 +1,40 @@
+﻿@using StudentsManager.UI.Models
+@model Homework
+@* Obtiene la lista de estudiantes del ViewBag *@
+@{
+    var students = ViewBag.Students as List<Student>;
+}
+
+<div class="container mt-5">
+    <h2 class="text-light">Agregar Nueva Tarea</h2>
+    <hr class="text-white" />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-controller="Homeworks" asp-action="Add" method="post">
+                <div class="mb-3">
+                    <label for="studentId" class="form-label text-light">Estudiante</label>
+                    <select class="form-select" id="studentId" asp-for="StudentId" required>
+                        <option value="">Seleccione un estudiante</option>
+                        @if (students != null)
+                        {
+                            @foreach (var student in students)
+                            {
+                                <option value="@student.Id">@student.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label text-light">Descripción</label>
+                    <input type="text" class="form-control" id="description" asp-for="Description" required>
+                </div>
+                <div class="mb-3">
+                    <label for="score" class="form-label text-light">Calificación</label>
+                    <input type="number" class="form-control" id="score" asp-for="Score" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Tarea</button>
+                <a asp-controller="Homeworks" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>

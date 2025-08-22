@@ -15,6 +15,7 @@ namespace StudentsManager.UI
 
             builder.Services.AddHttpClient<StudentApiService>(client => client.BaseAddress = new Uri(BaseApiUri));
 
+            // Inyectamos el servicio de tareas aquí
             builder.Services.AddHttpClient<HomeworkApiService>(client => client.BaseAddress = new Uri(BaseApiUri));
 
 

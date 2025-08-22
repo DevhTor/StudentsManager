@@ -12,7 +12,7 @@ namespace StudentsManager.Models
 
 
         [ForeignKey("StudentId")]
-        public required Student Student { get; set; }
+        public Student? Student { get; set; }
 
     }
 }
