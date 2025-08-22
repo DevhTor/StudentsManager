@@ -18,6 +18,8 @@ namespace StudentsManager.UI.Controllers
         public async Task<IActionResult> Index()
         {
             List<Homework> homeworks = await _homeworkApiService.GetAllHomeworksAsync();
+            var students = await _studentApiService.GetAllStudentsAsync(); // Obtiene la lista de estudiantes
+            ViewBag.Students = students; // Pasa la lista de estudiantes a la vista
             return View(homeworks);
         }
 
@@ -43,6 +45,73 @@ namespace StudentsManager.UI.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        // Método GET para editar una tarea
+        public async Task<IActionResult> Edit(long id)
+        {
+            var homework = await _homeworkApiService.GetHomeworkByIdAsync(id); // Obtiene la tarea por su ID
+            if (homework == null)
+            {
+                return NotFound();
+            }
+
+            var students = await _studentApiService.GetAllStudentsAsync();
+            ViewBag.Students = students; // Pasa la lista de estudiantes a la vista
+            return View(homework);
+        }
+
+        // Método POST para guardar la edición de una tarea
+        [HttpPost]
+        public async Task<IActionResult> Edit(Homework homework)
+        {
+            var success = await _homeworkApiService.UpdateHomeworkAsync(homework);
+
+            if (success)
+            {
+                TempData["StatusMessage"] = "Tarea actualizada exitosamente.";
+            }
+            else
+            {
+                TempData["StatusMessage"] = "Error: No se pudo actualizar la tarea.";
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
+        // Método para eliminar una tarea
+        public async Task<IActionResult> Delete(long id)
+        {
+            var success = await _homeworkApiService.DeleteHomeworkAsync(id);
+
+            if (success)
+            {
+                TempData["StatusMessage"] = "Tarea eliminada exitosamente.";
+            }
+            else
+            {
+                TempData["StatusMessage"] = "Error: No se pudo eliminar la tarea.";
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        // Método para mostrar los detalles de una tarea
+        public async Task<IActionResult> Detail(long id)
+        {
+            var homework = await _homeworkApiService.GetHomeworkByIdAsync(id);
+            if (homework == null)
+            {
+                return NotFound();
+            }
+
+            var students = await _studentApiService.GetAllStudentsAsync();
+            // Busca el estudiante por ID
+            var student = students?.FirstOrDefault(s => s.Id == homework.StudentId);
+            ViewBag.StudentName = student?.Name ?? "Estudiante no encontrado"; // Pasa el nombre del estudiante a la vista
+
+            return View(homework);
         }
     }
 }

@@ -2,10 +2,14 @@
 @using System.Text.Encodings.Web
 @model List<Homework>
 
+@{
+    var students = ViewBag.Students as List<Student>;
+}
+
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="text-light">Lista De Tareas</h2>
-        <!-- Nuevo botón para agregar una nueva tarea -->
+        <!-- Botón para agregar una nueva tarea -->
         <a asp-controller="Homeworks" asp-action="Add" class="btn btn-primary">
             Agregar Tarea
         </a>
@@ -14,21 +18,33 @@
         <thead>
             <tr>
                 <th scope="col" class="text-primary">Id</th>
-                <th scope="col" class="text-primary">StudentId</th>
+                <th scope="col" class="text-primary">Estudiante</th> <!-- Se cambió a "Estudiante" -->
                 <th scope="col" class="text-primary">Descripcion</th>
                 <th scope="col" class="text-primary">Calificacion</th>
+                <th scope="col" class="text-primary">Acciones</th> <!-- Nueva columna para acciones -->
             </tr>
         </thead>
         <tbody>
-            @if (Model != null && Model.Any())
+            @if (Model != null && Model.Count > 0)
             {
-                @foreach (var student in Model)
+                @foreach (var homework in Model)
                 {
+                    // Busca el estudiante por ID
+                    var student = students?.FirstOrDefault(s => s.Id == homework.StudentId);
+                    var studentName = student?.Name ?? "Estudiante no encontrado";
                     <tr>
-                        <th scope="row">@student.Id</th>
-                        <td>@student.StudentId</td>
-                        <td>@student.Description</td>
-                        <td>@student.Score</td>
+                        <th scope="row">@homework.Id</th>
+                        <td>@studentName</td> <!-- Se muestra el nombre del estudiante -->
+                        <td>@homework.Description</td>
+                        <td>@homework.Score</td>
+                        <td>
+                            <!-- Botón para ver detalles, enlaza con la acción 'Detail' -->
+                            <a asp-controller="Homeworks" asp-action="Detail" asp-route-id="@homework.Id" class="btn btn-sm btn-info">Detalles</a>
+                            <!-- Botón para editar, enlaza con la acción 'Edit' y pasa el Id del estudiante -->
+                            <a asp-controller="Homeworks" asp-action="Edit" asp-route-id="@homework.Id" class="btn btn-sm btn-warning">Editar</a>
+                            <!-- Botón para eliminar, enlaza con la acción 'Delete' y pasa el Id del estudiante -->
+                            <a asp-controller="Homeworks" asp-action="Delete" asp-route-id="@homework.Id" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar esta tarea?');">Eliminar</a>
+                        </td>
                     </tr>
                 }
             }
@@ -40,6 +56,6 @@
 {
     var message = TempData["StatusMessage"].ToString();
     <script>
-        alert('@Html.Raw(JavaScriptEncoder.Default.Encode(message))');
+        console.log('@Html.Raw(JavaScriptEncoder.Default.Encode(message))');
     </script>
 }
