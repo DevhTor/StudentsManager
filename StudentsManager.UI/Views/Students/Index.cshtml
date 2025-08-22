@@ -10,6 +10,10 @@
             Agregar
         </a>
     </div>
+
+    <!-- Contenedor para el mensaje de estado -->
+    <div id="statusMessage" class="alert d-none" role="alert"></div>
+
     <table class="table table-striped table-bordered table-dark">
         <thead>
             <tr>
@@ -60,6 +64,18 @@
 {
     var message = TempData["StatusMessage"].ToString();
     <script>
-        alert('@Html.Raw(JavaScriptEncoder.Default.Encode(message))');
+        document.addEventListener('DOMContentLoaded', function () {
+            var messageElement = document.getElementById('statusMessage');
+            var message = '@Html.Raw(JavaScriptEncoder.Default.Encode(message))';
+            if (message) {
+                messageElement.textContent = message;
+                messageElement.classList.remove('d-none');
+                messageElement.classList.add('alert-success');
+                // Oculta el mensaje después de 5 segundos
+                setTimeout(function () {
+                    messageElement.classList.add('d-none');
+                }, 5000);
+            }
+        });
     </script>
 }
