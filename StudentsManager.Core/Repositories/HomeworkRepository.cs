@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StudentsManager.Data;
-using StudentsManager.Models;
+using StudentsManager.Core.Data;
+using StudentsManager.Core.Models;
 
-namespace StudentsManager.Repositories
+namespace StudentsManager.Core.Repositories
 {
     public class HomeworkRepository : IHomeworkRepository
     {

@@ -1,4 +1,4 @@
-﻿namespace StudentsManager.Models
+﻿namespace StudentsManager.Core.Models
 {
     public class StudentFinalScore
     {

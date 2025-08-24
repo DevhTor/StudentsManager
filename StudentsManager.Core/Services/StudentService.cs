@@ -1,7 +1,7 @@
-﻿using StudentsManager.Models;
-using StudentsManager.Repositories;
+﻿using StudentsManager.Core.Models;
+using StudentsManager.Core.Repositories;
 
-namespace StudentsManager.Services
+namespace StudentsManager.Core.Services
 {
     public class StudentService
     {

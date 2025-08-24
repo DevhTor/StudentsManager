@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StudentsManager.Models;
-using StudentsManager.Services;
+using StudentsManager.Core.Models;
+using StudentsManager.Core.Services;
 
 namespace StudentsManager.Controllers
 {

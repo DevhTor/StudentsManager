@@ -1,5 +1,6 @@
 using StudentsManager.UI.Services;
 
+
 namespace StudentsManager.UI
 {
     public class Program
@@ -17,7 +18,6 @@ namespace StudentsManager.UI
 
             // Inyectamos el servicio de tareas aquí
             builder.Services.AddHttpClient<HomeworkApiService>(client => client.BaseAddress = new Uri(BaseApiUri));
-
 
             var app = builder.Build();
 

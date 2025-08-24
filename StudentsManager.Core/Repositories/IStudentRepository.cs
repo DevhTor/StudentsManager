@@ -1,6 +1,6 @@
-﻿using StudentsManager.Models;
+﻿using StudentsManager.Core.Models;
 
-namespace StudentsManager.Repositories
+namespace StudentsManager.Core.Repositories
 {
     public interface IStudentRepository
     {

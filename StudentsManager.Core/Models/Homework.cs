@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StudentsManager.Models
+namespace StudentsManager.Core.Models
 {
     [Table("homework")]
     public class Homework

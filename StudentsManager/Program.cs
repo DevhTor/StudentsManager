@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using StudentsManager.Data;
-using StudentsManager.Repositories;
-using StudentsManager.Services;
+using StudentsManager.Core.Data;
+using StudentsManager.Core.Repositories;
+using StudentsManager.Core.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
